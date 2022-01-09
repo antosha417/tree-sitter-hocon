@@ -1,0 +1,266 @@
+===================
+Arrays
+===================
+
+[
+  345,
+  10.1,
+  10,
+  -10,
+  null,
+  true,
+  false,
+  { "stuff": "good" }
+]
+
+---
+
+(document (array
+  (number)
+  (number)
+  (number)
+  (number)
+  (null)
+  (true)
+  (false)
+  (object (pair (string) (string)))))
+
+=====================
+String content
+=====================
+
+[
+  "",
+  "abc",
+  "def\n",
+  "ghi\t",
+  "jkl\f"
+]
+
+----
+
+(document
+  (array
+    (string)
+    (string)
+    (string (escape_sequence))
+    (string (escape_sequence))
+    (string (escape_sequence))))
+
+================================
+Top-level numbers
+================================
+
+-1
+
+---
+
+(document (number))
+
+================================
+Top-level null
+================================
+
+null
+
+---
+
+(document (null))
+
+
+================================
+Top-level object 
+================================
+
+{
+  "Jake": "the dog",
+  "Finn" = "the human"
+}
+
+---
+
+(document (object 
+  (pair (string) (string))
+  (pair (string) (string))
+))
+
+================================
+Top-level omit curly braces 
+================================
+
+"Jake": "the dog",
+"Finn" = "the human"
+
+---
+
+(document 
+  (pair (string) (string))
+  (pair (string) (string))
+)
+
+================================
+Omit pair separator on object
+================================
+
+{
+  "Jake": {
+    "the": "dog"
+  },
+  "Finn" {
+    "the" = "human"
+  }
+}
+
+---
+
+(document (object
+  (pair 
+    (string) 
+    (object (pair (string) (string))))
+  (pair 
+    (string) 
+    (object (pair (string) (string))))
+))
+
+================================
+New line and comma as pair separator
+================================
+
+"Jake": "the dog",
+
+"Finn" = "the human"
+
+"Marceline" : "the Vampire Queen"
+
+---
+
+(document 
+  (pair (string) (string))
+  (pair (string) (string))
+  (pair (string) (string))
+)
+
+================================
+New line and comma as arr separator
+================================
+
+[ 1,
+  2
+  3
+
+  4,
+  5,
+]
+
+---
+
+(document (array 
+  (number)
+  (number)
+  (number)
+  (number)
+  (number)
+))
+
+================================
+New line and comma as obj separator
+================================
+{
+  "Jake": "the dog"
+  "Finn" = "the human"
+
+  "Marceline" : "the Vampire Queen",
+}
+---
+
+(document (object 
+  (pair (string) (string))
+  (pair (string) (string))
+  (pair (string) (string))
+))
+
+================================
+Unquoted strings
+================================
+{
+  "Jake": the dog,
+  Finn = the human
+  "Marceline" : "the Vampire Queen",
+  Princess.Bubblegum: [
+    PB // most common
+    Peebles / P-Bubs
+    Bub-Bubs
+    Princess Bonnibel 'Bonnie' Bubblegum # full name
+  ]
+}
+---
+
+(document (object 
+  (pair (string) (unquoted_value (unquoted_string)))
+  (pair (unquoted_string) (unquoted_value (unquoted_string)))
+  (pair (string) (string))
+  (pair (unquoted_string) (array 
+    (unquoted_value (unquoted_string)) 
+    (comment)
+    (unquoted_value (unquoted_string)) 
+    (unquoted_value (unquoted_string)) 
+    (unquoted_value (unquoted_string)) 
+    (comment)
+  ))
+))
+
+================================
+Multiline strings
+================================
+
+"key" : """
+           mult1line_$tring
+           this is \ mu/tiline "string"
+           // with all knid of \r characters \t \n inside
+        """
+"another_key" = this is unquoted_value (unquoted_string)
+"super_key" = "this is regular string"
+
+---
+
+(document 
+  (pair 
+    (string)
+    (multiline_string))
+  (pair 
+    (string)
+    (unquoted_value (unquoted_string)))
+  (pair 
+    (string)
+    (string))
+)
+
+================================
+Substitutions
+================================
+
+"Jake": the ${dog},
+Finn = [${the} hu${?ma}n]
+"Marceline" : ${the Vampire Queen},
+
+---
+
+(document 
+  (pair 
+    (string)
+    (unquoted_value 
+      (unquoted_string)
+      (substitution (unquoted_string))))
+  (pair 
+    (unquoted_string)
+    (array (unquoted_value
+      (substitution (unquoted_string))
+      (unquoted_string)
+      (substitution (unquoted_string))
+      (unquoted_string)
+    )))
+  (pair 
+    (string)
+    (unquoted_value (substitution (unquoted_string))))
+)
+
