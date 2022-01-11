@@ -15,8 +15,17 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "SYMBOL",
-                  "name": "pair"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "pair"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "include"
+                    }
+                  ]
                 },
                 {
                   "type": "REPEAT",
@@ -37,8 +46,17 @@
                         ]
                       },
                       {
-                        "type": "SYMBOL",
-                        "name": "pair"
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "SYMBOL",
+                            "name": "pair"
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "include"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -133,8 +151,17 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "SYMBOL",
-                  "name": "pair"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "include"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "pair"
+                    }
+                  ]
                 },
                 {
                   "type": "REPEAT",
@@ -155,8 +182,17 @@
                         ]
                       },
                       {
-                        "type": "SYMBOL",
-                        "name": "pair"
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "SYMBOL",
+                            "name": "include"
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "pair"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -199,21 +235,8 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "string"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "number"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "unquoted_string"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "_path"
         },
         {
           "type": "CHOICE",
@@ -829,6 +852,40 @@
         ]
       }
     },
+    "_separator": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "STRING",
+          "value": "="
+        },
+        {
+          "type": "STRING",
+          "value": "+="
+        }
+      ]
+    },
+    "_path": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "string"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "number"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unquoted_path"
+        }
+      ]
+    },
     "_string_content": {
       "type": "REPEAT1",
       "content": {
@@ -848,19 +905,6 @@
         ]
       }
     },
-    "_separator": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": ":"
-        },
-        {
-          "type": "STRING",
-          "value": "="
-        }
-      ]
-    },
     "unquoted_value": {
       "type": "REPEAT1",
       "content": {
@@ -879,7 +923,11 @@
     },
     "unquoted_string": {
       "type": "PATTERN",
-      "value": "[a-zA-Z_]([^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\n\\/]|\\/[^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\n\\/])*"
+      "value": "[a-zA-Z_.]([^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\n\\/]|\\/[^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\n\\/])*"
+    },
+    "unquoted_path": {
+      "type": "PATTERN",
+      "value": "(i|in|inc|incl|inclu|includ|(i|in|inc|incl|inclu|includ)\\/|(i|in|inc|incl|inclu|includ)\\/[^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\n\\/]([^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\n\\/]|\\/[^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\n\\/])*|([a-hj-zA-Z_.]|i[^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\nn\\/]|in[^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\nc\\/]|inc[^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\nl\\/]|incl[^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\nu\\/]|inclu[^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\nd\\/]|includ[^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\ne\\/]|include[^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\n\\s\\/])([^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\n\\/]|\\/[^$:=,+#`^?!?*&\"\\{\\}\\[\\]\\\\\\n\\/])*)"
     },
     "multiline_string": {
       "type": "SEQ",
@@ -915,11 +963,562 @@
         },
         {
           "type": "SYMBOL",
-          "name": "unquoted_string"
+          "name": "_path"
         },
         {
           "type": "STRING",
           "value": "}"
+        }
+      ]
+    },
+    "include": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "include"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "required"
+                },
+                {
+                  "type": "STRING",
+                  "value": "("
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_resource_name"
+                },
+                {
+                  "type": "STRING",
+                  "value": ")"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_resource_name"
+            }
+          ]
+        }
+      ]
+    },
+    "_resource_name": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "string"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "url"
+                },
+                {
+                  "type": "STRING",
+                  "value": "file"
+                },
+                {
+                  "type": "STRING",
+                  "value": "classpath"
+                }
+              ]
+            },
+            {
+              "type": "STRING",
+              "value": "("
+            },
+            {
+              "type": "SYMBOL",
+              "name": "string"
+            },
+            {
+              "type": "STRING",
+              "value": ")"
+            }
+          ]
+        }
+      ]
+    },
+    "_format": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "ns"
+        },
+        {
+          "type": "STRING",
+          "value": "nano"
+        },
+        {
+          "type": "STRING",
+          "value": "nanos"
+        },
+        {
+          "type": "STRING",
+          "value": "nanosecond"
+        },
+        {
+          "type": "STRING",
+          "value": "nanoseconds"
+        },
+        {
+          "type": "STRING",
+          "value": "us"
+        },
+        {
+          "type": "STRING",
+          "value": "micro"
+        },
+        {
+          "type": "STRING",
+          "value": "micros"
+        },
+        {
+          "type": "STRING",
+          "value": "microsecond"
+        },
+        {
+          "type": "STRING",
+          "value": "microseconds"
+        },
+        {
+          "type": "STRING",
+          "value": "ms"
+        },
+        {
+          "type": "STRING",
+          "value": "milli"
+        },
+        {
+          "type": "STRING",
+          "value": "millis"
+        },
+        {
+          "type": "STRING",
+          "value": "millisecond"
+        },
+        {
+          "type": "STRING",
+          "value": "milliseconds"
+        },
+        {
+          "type": "STRING",
+          "value": "s"
+        },
+        {
+          "type": "STRING",
+          "value": "second"
+        },
+        {
+          "type": "STRING",
+          "value": "seconds"
+        },
+        {
+          "type": "STRING",
+          "value": "m"
+        },
+        {
+          "type": "STRING",
+          "value": "minute"
+        },
+        {
+          "type": "STRING",
+          "value": "minutes"
+        },
+        {
+          "type": "STRING",
+          "value": "h"
+        },
+        {
+          "type": "STRING",
+          "value": "hour"
+        },
+        {
+          "type": "STRING",
+          "value": "hours"
+        },
+        {
+          "type": "STRING",
+          "value": "d"
+        },
+        {
+          "type": "STRING",
+          "value": "day"
+        },
+        {
+          "type": "STRING",
+          "value": "days"
+        },
+        {
+          "type": "STRING",
+          "value": "d"
+        },
+        {
+          "type": "STRING",
+          "value": "day"
+        },
+        {
+          "type": "STRING",
+          "value": "days"
+        },
+        {
+          "type": "STRING",
+          "value": "w"
+        },
+        {
+          "type": "STRING",
+          "value": "week"
+        },
+        {
+          "type": "STRING",
+          "value": "weeks"
+        },
+        {
+          "type": "STRING",
+          "value": "m"
+        },
+        {
+          "type": "STRING",
+          "value": "mo"
+        },
+        {
+          "type": "STRING",
+          "value": "month"
+        },
+        {
+          "type": "STRING",
+          "value": "months"
+        },
+        {
+          "type": "STRING",
+          "value": "y"
+        },
+        {
+          "type": "STRING",
+          "value": "year"
+        },
+        {
+          "type": "STRING",
+          "value": "years"
+        },
+        {
+          "type": "STRING",
+          "value": "B"
+        },
+        {
+          "type": "STRING",
+          "value": "b"
+        },
+        {
+          "type": "STRING",
+          "value": "byte"
+        },
+        {
+          "type": "STRING",
+          "value": "bytes"
+        },
+        {
+          "type": "STRING",
+          "value": "kB"
+        },
+        {
+          "type": "STRING",
+          "value": "kilobyte"
+        },
+        {
+          "type": "STRING",
+          "value": "kilobytes"
+        },
+        {
+          "type": "STRING",
+          "value": "MB"
+        },
+        {
+          "type": "STRING",
+          "value": "megabyte"
+        },
+        {
+          "type": "STRING",
+          "value": "megabytes"
+        },
+        {
+          "type": "STRING",
+          "value": "GB"
+        },
+        {
+          "type": "STRING",
+          "value": "gigabyte"
+        },
+        {
+          "type": "STRING",
+          "value": "gigabytes"
+        },
+        {
+          "type": "STRING",
+          "value": "TB"
+        },
+        {
+          "type": "STRING",
+          "value": "terabyte"
+        },
+        {
+          "type": "STRING",
+          "value": "terabytes"
+        },
+        {
+          "type": "STRING",
+          "value": "PB"
+        },
+        {
+          "type": "STRING",
+          "value": "petabyte"
+        },
+        {
+          "type": "STRING",
+          "value": "petabytes"
+        },
+        {
+          "type": "STRING",
+          "value": "EB"
+        },
+        {
+          "type": "STRING",
+          "value": "exabyte"
+        },
+        {
+          "type": "STRING",
+          "value": "exabytes"
+        },
+        {
+          "type": "STRING",
+          "value": "ZB"
+        },
+        {
+          "type": "STRING",
+          "value": "zettabyte"
+        },
+        {
+          "type": "STRING",
+          "value": "zettabytes"
+        },
+        {
+          "type": "STRING",
+          "value": "YB"
+        },
+        {
+          "type": "STRING",
+          "value": "yottabyte"
+        },
+        {
+          "type": "STRING",
+          "value": "yottabytes"
+        },
+        {
+          "type": "STRING",
+          "value": "K"
+        },
+        {
+          "type": "STRING",
+          "value": "k"
+        },
+        {
+          "type": "STRING",
+          "value": "Ki"
+        },
+        {
+          "type": "STRING",
+          "value": "KiB"
+        },
+        {
+          "type": "STRING",
+          "value": "kibibyte"
+        },
+        {
+          "type": "STRING",
+          "value": "kibibytes"
+        },
+        {
+          "type": "STRING",
+          "value": "M"
+        },
+        {
+          "type": "STRING",
+          "value": "m"
+        },
+        {
+          "type": "STRING",
+          "value": "Mi"
+        },
+        {
+          "type": "STRING",
+          "value": "MiB"
+        },
+        {
+          "type": "STRING",
+          "value": "mebibyte"
+        },
+        {
+          "type": "STRING",
+          "value": "mebibytes"
+        },
+        {
+          "type": "STRING",
+          "value": "G"
+        },
+        {
+          "type": "STRING",
+          "value": "g"
+        },
+        {
+          "type": "STRING",
+          "value": "Gi"
+        },
+        {
+          "type": "STRING",
+          "value": "GiB"
+        },
+        {
+          "type": "STRING",
+          "value": "gibibyte"
+        },
+        {
+          "type": "STRING",
+          "value": "gibibytes"
+        },
+        {
+          "type": "STRING",
+          "value": "T"
+        },
+        {
+          "type": "STRING",
+          "value": "t"
+        },
+        {
+          "type": "STRING",
+          "value": "Ti"
+        },
+        {
+          "type": "STRING",
+          "value": "TiB"
+        },
+        {
+          "type": "STRING",
+          "value": "tebibyte"
+        },
+        {
+          "type": "STRING",
+          "value": "tebibytes"
+        },
+        {
+          "type": "STRING",
+          "value": "P"
+        },
+        {
+          "type": "STRING",
+          "value": "p"
+        },
+        {
+          "type": "STRING",
+          "value": "Pi"
+        },
+        {
+          "type": "STRING",
+          "value": "PiB"
+        },
+        {
+          "type": "STRING",
+          "value": "pebibyte"
+        },
+        {
+          "type": "STRING",
+          "value": "pebibytes"
+        },
+        {
+          "type": "STRING",
+          "value": "E"
+        },
+        {
+          "type": "STRING",
+          "value": "e"
+        },
+        {
+          "type": "STRING",
+          "value": "Ei"
+        },
+        {
+          "type": "STRING",
+          "value": "EiB"
+        },
+        {
+          "type": "STRING",
+          "value": "exbibyte"
+        },
+        {
+          "type": "STRING",
+          "value": "exbibytes"
+        },
+        {
+          "type": "STRING",
+          "value": "Z"
+        },
+        {
+          "type": "STRING",
+          "value": "z"
+        },
+        {
+          "type": "STRING",
+          "value": "Zi"
+        },
+        {
+          "type": "STRING",
+          "value": "ZiB"
+        },
+        {
+          "type": "STRING",
+          "value": "zebibyte"
+        },
+        {
+          "type": "STRING",
+          "value": "zebibytes"
+        },
+        {
+          "type": "STRING",
+          "value": "Y"
+        },
+        {
+          "type": "STRING",
+          "value": "y"
+        },
+        {
+          "type": "STRING",
+          "value": "Yi"
+        },
+        {
+          "type": "STRING",
+          "value": "YiB"
+        },
+        {
+          "type": "STRING",
+          "value": "yobibyte"
+        },
+        {
+          "type": "STRING",
+          "value": "yobibytes"
         }
       ]
     }
