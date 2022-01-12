@@ -21,7 +21,6 @@ const allowed_symbol_except = symbol => '[^' + [...reserved_symbols, symbol].joi
 // Sequence of allowed symbols. This sequence can contain single
 // forward slash (/) but should not contain two continuos forward slashes
 // since // is a comment start
-// const rest_symbols = `(${allowed_symbol_except('')}|\\/${allowed_symbol_except('')})*`
 const rest_symbols = `(${allowed_symbol}|/${allowed_symbol})*`
 const first_symbol = '[a-zA-Z_.]'
 
@@ -32,7 +31,7 @@ const unquoted_string = new RegExp(first_symbol + rest_symbols)
 // Unquoted path can not begin with word 'include' followed by a space character.
 const unquoted_path = new RegExp(
   '(i|in|inc|incl|inclu|includ|' +
-    '(i|in|inc|incl|inclu|includ)/|' +
+    '(i|in|inc|incl|inclu|ilclud)/|' +
     '(i|in|inc|incl|inclu|includ)/' + allowed_symbol + rest_symbols + '|' +
     '(' + [
         '[a-hj-zA-Z_.]',
@@ -54,10 +53,8 @@ module.exports = grammar(json, {
     /\s/,
     $.comment
   ],
-
-  confilicts: $ => [
-    [$.include, $.pair]
-  ],
+  
+  supertypes: _ => [ ],
 
   rules: {
     comment: _ => token(choice(
@@ -65,10 +62,10 @@ module.exports = grammar(json, {
       seq('#', /.*/),
     )),
 
-    document: ($, original) => choice(original, separated(choice($.pair, $.include))),
+    document: $ => choice($.array, $.object, choice(separated(choice($.include, $.pair)))),
 
     pair: $ => seq(
-      $._path,
+      field('key', $._path),
       choice(
         seq($._separator, $._value),
         $.object
@@ -98,6 +95,7 @@ module.exports = grammar(json, {
 
     _value: ($, original) => choice(
       original,
+      seq($.number, $.unit),
       $.unquoted_value,
       $.multiline_string,
     ),
@@ -135,7 +133,7 @@ module.exports = grammar(json, {
       seq(choice('url', 'file', 'classpath'), '(', $.string, ')')
     ),
 
-    _format: _ => choice(
+    unit: _ => choice(
       // Duration format
       'ns', 'nano', 'nanos', 'nanosecond', 'nanoseconds',
       'us', 'micro', 'micros', 'microsecond', 'microseconds',

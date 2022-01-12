@@ -1,47 +1,5 @@
 [
   {
-    "type": "_value",
-    "named": true,
-    "subtypes": [
-      {
-        "type": "array",
-        "named": true
-      },
-      {
-        "type": "false",
-        "named": true
-      },
-      {
-        "type": "multiline_string",
-        "named": true
-      },
-      {
-        "type": "null",
-        "named": true
-      },
-      {
-        "type": "number",
-        "named": true
-      },
-      {
-        "type": "object",
-        "named": true
-      },
-      {
-        "type": "string",
-        "named": true
-      },
-      {
-        "type": "true",
-        "named": true
-      },
-      {
-        "type": "unquoted_value",
-        "named": true
-      }
-    ]
-  },
-  {
     "type": "array",
     "named": true,
     "fields": {},
@@ -50,7 +8,43 @@
       "required": false,
       "types": [
         {
-          "type": "_value",
+          "type": "array",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "multiline_string",
+          "named": true
+        },
+        {
+          "type": "null",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "object",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "unit",
+          "named": true
+        },
+        {
+          "type": "unquoted_value",
           "named": true
         }
       ]
@@ -65,11 +59,15 @@
       "required": false,
       "types": [
         {
-          "type": "_value",
+          "type": "array",
           "named": true
         },
         {
           "type": "include",
+          "named": true
+        },
+        {
+          "type": "object",
           "named": true
         },
         {
@@ -121,17 +119,68 @@
   {
     "type": "pair",
     "named": true,
-    "fields": {},
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "unquoted_path",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "_value",
+          "type": "array",
           "named": true
         },
         {
-          "type": "unquoted_path",
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "multiline_string",
+          "named": true
+        },
+        {
+          "type": "null",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "object",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "unit",
+          "named": true
+        },
+        {
+          "type": "unquoted_value",
           "named": true
         }
       ]
@@ -174,6 +223,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "unit",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "unquoted_value",

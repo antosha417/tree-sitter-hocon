@@ -16,5 +16,11 @@
   },
   "scripts": {
     "test": "tree-sitter test"
-  }
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.hocon",
+      "file-types": [ "hocon" ]
+    }
+  ]
 }
