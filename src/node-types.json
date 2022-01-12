@@ -36,6 +36,10 @@
           "named": true
         },
         {
+          "type": "substitution",
+          "named": true
+        },
+        {
           "type": "true",
           "named": true
         },
@@ -44,7 +48,7 @@
           "named": true
         },
         {
-          "type": "unquoted_value",
+          "type": "unquoted_string",
           "named": true
         }
       ]
@@ -119,26 +123,89 @@
   {
     "type": "pair",
     "named": true,
-    "fields": {
-      "key": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "number",
-            "named": true
-          },
-          {
-            "type": "string",
-            "named": true
-          },
-          {
-            "type": "unquoted_path",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "path",
+          "named": true
+        },
+        {
+          "type": "value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "path",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "unquoted_path",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "string",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "escape_sequence",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "substitution",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "path",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "unit",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "unquoted_path",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "value",
+    "named": true,
+    "fields": {},
     "children": {
       "multiple": true,
       "required": true,
@@ -172,73 +239,15 @@
           "named": true
         },
         {
+          "type": "substitution",
+          "named": true
+        },
+        {
           "type": "true",
           "named": true
         },
         {
           "type": "unit",
-          "named": true
-        },
-        {
-          "type": "unquoted_value",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "string",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "escape_sequence",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "substitution",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "unquoted_path",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "unit",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "unquoted_value",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "substitution",
           "named": true
         },
         {
@@ -282,6 +291,10 @@
   },
   {
     "type": ",",
+    "named": false
+  },
+  {
+    "type": ".",
     "named": false
   },
   {
@@ -714,10 +727,6 @@
   },
   {
     "type": "true",
-    "named": true
-  },
-  {
-    "type": "unquoted_path",
     "named": true
   },
   {

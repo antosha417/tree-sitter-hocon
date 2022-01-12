@@ -20,8 +20,8 @@
 (substitution ["${" "${?" "}"] @punctuation.special)
 (substitution (_) @field)
 
-(pair [":" "=" "+=" ] @operator)
-(pair key: (_) @field)
+(path (_) @field)
+(value [":" "=" "+=" ] @operator)
 
 [
  "("
@@ -33,4 +33,5 @@
 ]  @punctuation.bracket
 
 [ "," ] @punctuation.delimiter
+(unquoted_path "." @punctuation.delimiter)
 

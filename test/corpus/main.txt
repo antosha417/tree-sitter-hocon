@@ -23,7 +23,7 @@ Arrays
   (null)
   (true)
   (false)
-  (object (pair (string) (string)))))
+  (object (pair (path (string)) (value (string))))))
 
 =====================
 String content
@@ -48,7 +48,7 @@ String content
     (string (escape_sequence))))
 
 ================================
-Top-level object 
+Top-level object
 ================================
 
 {
@@ -58,13 +58,13 @@ Top-level object
 
 ---
 
-(document (object 
-  (pair (string) (string))
-  (pair (string) (string))
+(document (object
+  (pair (path (string)) (value (string)))
+  (pair (path (string)) (value (string)))
 ))
 
 ================================
-Top-level omit curly braces 
+Top-level omit curly braces
 ================================
 
 "Jake": "the dog",
@@ -72,9 +72,9 @@ Top-level omit curly braces
 
 ---
 
-(document 
-  (pair (string) (string))
-  (pair (string) (string))
+(document
+  (pair (path (string)) (value (string)))
+  (pair (path (string)) (value (string)))
 )
 
 ================================
@@ -93,12 +93,12 @@ Omit pair separator on object
 ---
 
 (document (object
-  (pair 
-    (string) 
-    (object (pair (string) (string))))
-  (pair 
-    (string) 
-    (object (pair (string) (string))))
+  (pair
+    (path (string) )
+    (value (object (pair (path (string)) (value (string))))))
+  (pair
+    (path (string) )
+    (value (object (pair (path (string)) (value (string))))))
 ))
 
 ================================
@@ -113,32 +113,36 @@ New line and comma as pair separator
 
 ---
 
-(document 
-  (pair (string) (string))
-  (pair (string) (string))
-  (pair (string) (string))
+(document
+  (pair (path (string)) (value (string)))
+  (pair (path (string)) (value (string)))
+  (pair (path (string)) (value (string)))
 )
 
 ================================
 New line and comma as arr separator
 ================================
 
-[ 1,
-  2
-  3
-
-  4,
-  5,
+[ 
+  Scarlet
+  Root sword,
+  Demon blood sword,
+  Grass sword
+  Finn sword
+  Small sword,
+  Night Sword
 ]
 
 ---
 
-(document (array 
-  (number)
-  (number)
-  (number)
-  (number)
-  (number)
+(document (array
+  (unquoted_string)
+  (unquoted_string)
+  (unquoted_string)
+  (unquoted_string)
+  (unquoted_string)
+  (unquoted_string)
+  (unquoted_string)
 ))
 
 ================================
@@ -152,10 +156,10 @@ New line and comma as obj separator
 }
 ---
 
-(document (object 
-  (pair (string) (string))
-  (pair (string) (string))
-  (pair (string) (string))
+(document (object
+  (pair (path (string)) (value (string)))
+  (pair (path (string)) (value (string)))
+  (pair (path (string)) (value (string)))
 ))
 
 ================================
@@ -174,44 +178,42 @@ Unquoted strings
 }
 ---
 
-(document (object 
-  (pair (string) (unquoted_value (unquoted_string)))
-  (pair (unquoted_path) (unquoted_value (unquoted_string)))
-  (pair (string) (string))
-  (pair (unquoted_path) (array 
-    (unquoted_value (unquoted_string)) 
+(document (object
+  (pair (path (string)) (value (unquoted_string)))
+  (pair (path (unquoted_path)) (value (unquoted_string)))
+  (pair (path (string)) (value (string)))
+  (pair (path (unquoted_path)) (value (array
+    (unquoted_string)
     (comment)
-    (unquoted_value (unquoted_string)) 
-    (unquoted_value (unquoted_string)) 
-    (unquoted_value (unquoted_string)) 
+    (unquoted_string)
+    (unquoted_string)
+    (unquoted_string)
     (comment)
-  ))
+  )))
 ))
 
 ================================
 Multiline strings
 ================================
 
-"key" : """
-           mult1line_$tring
-           this is \ mu/tiline "string"
-           // with all knid of \r characters \t \n inside
+"song" : """
+          Come along with me
+          And the butterflies and bees
+          We can wander through the forest
+          And do so as we please
+          " $ \ \t // 
         """
-"another_key" = this is unquoted_value (unquoted_string)
-"super_key" = "this is regular string"
+"Jake": the dog,
 
 ---
 
-(document 
-  (pair 
-    (string)
-    (multiline_string))
-  (pair 
-    (string)
-    (unquoted_value (unquoted_string)))
-  (pair 
-    (string)
-    (string))
+(document
+  (pair
+    (path (string))
+    (value (multiline_string)))
+  (pair
+    (path (string))
+    (value (unquoted_string)))
 )
 
 ================================
@@ -224,23 +226,23 @@ Finn = [${the} hu${?ma}n]
 
 ---
 
-(document 
-  (pair 
-    (string)
-    (unquoted_value 
+(document
+  (pair
+    (path (string))
+    (value
       (unquoted_string)
-      (substitution (string))))
-  (pair 
-    (unquoted_path)
-    (array (unquoted_value
-      (substitution (unquoted_path))
+      (substitution (path (string)))))
+  (pair
+    (path (unquoted_path))
+    (value (array
+      (substitution (path (unquoted_path)))
       (unquoted_string)
-      (substitution (unquoted_path))
+      (substitution (path (unquoted_path)))
       (unquoted_string)
     )))
-  (pair 
-    (string)
-    (unquoted_value (substitution (unquoted_path))))
+  (pair
+    (path (string))
+    (value (substitution (path (unquoted_path)))))
 )
 
 ================================
@@ -254,14 +256,14 @@ include required(url("BMO's website"))
 
 ---
 
-(document 
+(document
   (include (string))
-  (pair 
-    (unquoted_path)
-    (unquoted_value (unquoted_string)))
-  (pair 
-    (string)
-    (unquoted_value (unquoted_string)))
+  (pair
+    (path (unquoted_path))
+    (value (unquoted_string)))
+  (pair
+    (path (string))
+    (value (unquoted_string)))
   (include (string)))
 
 
@@ -280,15 +282,40 @@ Includes inside object
 ---
 
 (document (object
-  (pair 
-    (unquoted_path)
-    (unquoted_value (unquoted_string)))
+  (pair
+    (path (unquoted_path))
+    (value (unquoted_string)))
   (include (comment) (string))
-  (pair 
-    (string)
-    (unquoted_value (unquoted_string)))
+  (pair
+    (path (string))
+    (value (unquoted_string)))
   (include (string))))
 
+===================
+Multiple values in path
+===================
+
+"Fi" "nn" the human: Jake the dog
+
+---
+
+(document (pair
+  (path (string) (string) (unquoted_path))
+  (value (unquoted_string))
+))
+
+===================
+Multiple values in value
+===================
+
+"Finn the human": Jake ${th "e"} "dog"
+
+---
+
+(document (pair
+  (path (string))
+  (value (unquoted_string) (substitution (path (unquoted_path) (string))) (string))
+))
 
 ================================
 Text from hocon playground
@@ -315,34 +342,33 @@ Try it out: conf is parsed online as you type
 
 ---
 
-(document 
-  (pair 
-    (unquoted_path)
-    (unquoted_value (unquoted_string)))
-  (pair 
-    (string)
-    (string))
+(document
   (pair
-    (unquoted_path)
-    (array 
-      (unquoted_value (unquoted_string))
-      (unquoted_value (unquoted_string))
-      (unquoted_value (unquoted_string))
-      (unquoted_value (unquoted_string))
-      (unquoted_value (unquoted_string))
-      (comment)))
+    (path (unquoted_path))
+    (value (unquoted_string)))
   (pair
-    (unquoted_path)
-    (string))
+    (path (string))
+    (value (string)))
   (pair
-    (unquoted_path)
-    (unquoted_value 
-      (substitution (unquoted_path))
-      (unquoted_string) 
-      (substitution (unquoted_path))))
-  (pair 
-    (unquoted_path)
-    (unquoted_value (unquoted_string)))
+    (path (unquoted_path))
+    (value (array
+      (unquoted_string)
+      (unquoted_string)
+      (unquoted_string)
+      (unquoted_string)
+      (unquoted_string)
+      (comment))))
+  (pair
+    (path (unquoted_path))
+    (value (string)))
+  (pair
+    (path (unquoted_path))
+    (value
+      (substitution (path (unquoted_path)))
+      (unquoted_string)
+      (substitution (path (unquoted_path)))))
+  (pair
+    (path (unquoted_path))
+    (value (unquoted_string)))
 )
-
 
