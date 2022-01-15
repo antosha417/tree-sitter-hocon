@@ -143,6 +143,13 @@ New line and comma as arr separator
   (unquoted_string)
   (unquoted_string)
   (unquoted_string)
+  (unquoted_string)
+  (unquoted_string)
+  (unquoted_string)
+  (unquoted_string)
+  (unquoted_string)
+  (unquoted_string)
+  (unquoted_string)
 ))
 
 ================================
@@ -179,12 +186,17 @@ Unquoted strings
 ---
 
 (document (object
-  (pair (path (string)) (value (unquoted_string)))
-  (pair (path (unquoted_path)) (value (unquoted_string)))
+  (pair (path (string)) (value (unquoted_string) (unquoted_string)))
+  (pair (path (unquoted_path)) (value (unquoted_string) (unquoted_string)))
   (pair (path (string)) (value (string)))
   (pair (path (unquoted_path)) (value (array
     (unquoted_string)
     (comment)
+    (unquoted_string)
+    (unquoted_string)
+    (unquoted_string)
+    (unquoted_string)
+    (unquoted_string)
     (unquoted_string)
     (unquoted_string)
     (unquoted_string)
@@ -213,7 +225,7 @@ Multiline strings
     (value (multiline_string)))
   (pair
     (path (string))
-    (value (unquoted_string)))
+    (value (unquoted_string) (unquoted_string)))
 )
 
 ================================
@@ -260,10 +272,10 @@ include required(url("BMO's website"))
   (include (string))
   (pair
     (path (unquoted_path))
-    (value (unquoted_string)))
+    (value (unquoted_string) (unquoted_string)))
   (pair
     (path (string))
-    (value (unquoted_string)))
+    (value (unquoted_string) (unquoted_string)))
   (include (string)))
 
 
@@ -284,11 +296,11 @@ Includes inside object
 (document (object
   (pair
     (path (unquoted_path))
-    (value (unquoted_string)))
+    (value (unquoted_string) (unquoted_string)))
   (include (comment) (string))
   (pair
     (path (string))
-    (value (unquoted_string)))
+    (value (unquoted_string) (unquoted_string)))
   (include (string))))
 
 ===================
@@ -301,7 +313,7 @@ Multiple values in path
 
 (document (pair
   (path (string) (string) (unquoted_path))
-  (value (unquoted_string))
+  (value (unquoted_string) (unquoted_string) (unquoted_string))
 ))
 
 ===================
@@ -334,6 +346,7 @@ features: [
     # ability to write comments
 ]
 
+
 specs url: "https://github.com/lightbend/config/blob/master/HOCON.md"
 
 it's: ${it's}. A ${HOCON}
@@ -345,18 +358,22 @@ Try it out: conf is parsed online as you type
 (document
   (pair
     (path (unquoted_path))
-    (value (unquoted_string)))
+    (value (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string)))
   (pair
     (path (string))
     (value (string)))
   (pair
     (path (unquoted_path))
     (value (array
-      (unquoted_string)
-      (unquoted_string)
-      (unquoted_string)
-      (unquoted_string)
-      (unquoted_string)
+      (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string)
+      (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string)
+      (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string)
+      (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string)
+      (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string)
+      (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string)
+      (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string)
+      (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string)
+      (unquoted_string) (unquoted_string) 
       (comment))))
   (pair
     (path (unquoted_path))
@@ -365,10 +382,12 @@ Try it out: conf is parsed online as you type
     (path (unquoted_path))
     (value
       (substitution (path (unquoted_path)))
-      (unquoted_string)
+      (unquoted_string) (unquoted_string) 
       (substitution (path (unquoted_path)))))
   (pair
     (path (unquoted_path))
-    (value (unquoted_string)))
+    (value 
+      (unquoted_string) (unquoted_string) (unquoted_string) (unquoted_string)
+      (unquoted_string) (unquoted_string) (unquoted_string)))
 )
 

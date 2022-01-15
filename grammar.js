@@ -66,17 +66,16 @@ module.exports = grammar(json, {
         '$', ':', '=', ',', '+',
         '#', '`', '^', '?', '!',
         '?', '*', '&', '"', '\\{',
-        '\\}', '\\[', '\\]', '\\\\', '\\n', '/'
+        '\\}', '\\[', '\\]', '\\\\', '\\n', '/', ' '
       ]
       const allowed_symbol = '[^' + reserved_symbols.join('') + ']'
 
       // Sequence of allowed symbols. This sequence can contain single
       // forward slash (/) but should not contain two continuos forward slashes
       // since // is a comment start
-      const rest_symbols = `(${allowed_symbol}|/${allowed_symbol})*`
-      const first_symbol = '[a-zA-Z_.]'
+      const symbols = `/|(${allowed_symbol}|/${allowed_symbol})+`
 
-      return new RegExp(first_symbol + rest_symbols)
+      return new RegExp(symbols)
     },
 
     unquoted_path: _ => {
@@ -98,7 +97,7 @@ module.exports = grammar(json, {
       // It can not contail two continuos forward slashes since // is a comment start.
       // Unquoted path can not begin with word 'include' followed by a space character.
       const unquoted_path = new RegExp(
-        '(i|in|inc|incl|inclu|includ|' +
+        '(/|i|in|inc|incl|inclu|includ|' +
           '(i|in|inc|incl|inclu|ilclud)/|' +
           '(i|in|inc|incl|inclu|includ)/' + allowed_symbol + rest_symbols + '|' +
           '(' + [
