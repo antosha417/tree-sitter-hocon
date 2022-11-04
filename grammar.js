@@ -4,7 +4,7 @@ module.exports = grammar(json, {
   name: 'hocon',
 
   extras: $ => [
-    /\s/,
+    /[ \f\r\t\v]/,
     $.comment
   ],
   
@@ -17,13 +17,12 @@ module.exports = grammar(json, {
     )),
 
     document: $ => choice(
-      $.array, 
-      $.object, 
-      choice(commaOrNewLineSeparated(choice($.include, $.pair)))
+      seq(repeat('\n'), $.array, repeat('\n')),
+      seq(repeat('\n'), $.object, repeat('\n')),
+      commaOrNewLineSeparated(choice($.include, $.pair))
     ),
 
     object: $ => seq("{", commaOrNewLineSeparated(choice($.include, $.pair)), "}"),
-
 
     pair: $ => seq(
       $.path,
@@ -131,6 +130,7 @@ module.exports = grammar(json, {
 
     include: $ => seq(
       'include',
+      repeat('\n'),
       choice(
         seq('required', '(', $._resource_name, ')'),
         $._resource_name
@@ -186,8 +186,11 @@ module.exports = grammar(json, {
 });
 
 function commaOrNewLineSeparated(rule) {
-  const separator = choice(',', '\n')
-  return optional(separated(rule, separator))
+  const separator = choice(seq(',', repeat('\n')), repeat1('\n'));
+  return seq(
+    repeat('\n'),
+    optional(separated(rule, separator)),
+  );
 }
 
 function separated(rule, separator) {
