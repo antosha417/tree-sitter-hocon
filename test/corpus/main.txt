@@ -391,3 +391,55 @@ Try it out: conf is parsed online as you type
       (unquoted_string) (unquoted_string) (unquoted_string)))
 )
 
+================================
+Tabs instead of spaces
+================================
+
+bridges.mqtt.egress_br {
+	enable = true
+	direction = egress
+	connector = ${connectors.mqtt.central}
+}
+
+rule_engine.rules.egress_rule {
+	enable = true
+	sql = """
+		select * from "$bridges/mqtt:egress_br"
+	"""
+	actions = [{
+		function = republish
+		args { topic = "${topic}" }
+	}]
+}
+
+---
+
+(document
+  (pair
+    (path (unquoted_path))
+    (value
+      (object
+        (pair (path (unquoted_path)) (value (true)))
+        (pair (path (unquoted_path)) (value (unquoted_string)))
+        (pair
+          (path (unquoted_path))
+          (value (substitution (path (unquoted_path))))))))
+  (pair
+    (path (unquoted_path))
+    (value
+      (object
+        (pair (path (unquoted_path)) (value (true)))
+        (pair (path (unquoted_path)) (value (multiline_string)))
+        (pair
+          (path (unquoted_path))
+          (value
+            (array
+              (object
+                (pair (path (unquoted_path)) (value (unquoted_string)))
+                (pair
+                  (path (unquoted_path))
+                  (value
+                    (object
+                      (pair
+                        (path (unquoted_path))
+                        (value (string))))))))))))))
